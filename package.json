@@ -1,0 +1,2 @@
+{"name":"agent-project-timer","version":"0.1.0","description":"Local-first project time tracking for Codex, Claude Code, Cline and OpenCode","type":"module","bin":{"agent-timer":"src/cli.js"},"exports":"./src/index.js","files":["src","public","README.md","LICENSE"],"scripts":{"start":"node src/cli.js serve","test":"node --test test/timer.test.js test/integration.test.js test/lifecycle.test.js test/review.test.js","pack:check":"npm pack --dry-run"},"engines":{"node":">=22.13.0"},"license":"MIT"}
+

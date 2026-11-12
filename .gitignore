@@ -1,0 +1,10 @@
+node_modules/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.tgz
+*.timer-backup
+.DS_Store
+
+work/
+.data/

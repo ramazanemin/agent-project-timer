@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtempSync,readFileSync,writeFileSync,mkdirSync,rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { TimerStore } from '../src/store.js';
+import { createTimerServer } from '../src/server.js';
+import { install } from '../src/install.js';
+test('HTTP panel reads projects and protects mutations from cross-origin requests',async()=>{const store=new TimerStore(':memory:');store.event({project:process.cwd(),session:'s',agent:'codex',state:'start'});const server=createTimerServer(store);await new Promise(r=>server.listen(0,'127.0.0.1',r));try{const base=`http://127.0.0.1:${server.address().port}`;assert.equal((await fetch(base)).status,200);let list=await (await fetch(base+'/api/projects')).json();assert.equal(list.length,1);const url=base+'/api/projects/'+list[0].id+'/complete';assert.equal((await fetch(url,{method:'POST',headers:{origin:'https://evil.test'}})).status,403);assert.equal((await fetch(url,{method:'POST'})).status,200);assert.equal((await (await fetch(base+'/api/projects')).json())[0].status,'completed');assert.equal((await fetch(base+'/api/projects/999/reopen',{method:'POST'})).status,400);}finally{await new Promise(r=>server.close(r));store.close();}});
+test('installation preserves other hooks and is idempotent',()=>{const dir=mkdtempSync(join(tmpdir(),'timer-install-'));try{mkdirSync(join(dir,'.claude'));writeFileSync(join(dir,'.claude','settings.local.json'),JSON.stringify({env:{KEEP:'yes'},hooks:{Stop:[{hooks:[{type:'command',command:'echo existing'}]}]}}));install('claude',dir);install('claude',dir);const c=JSON.parse(readFileSync(join(dir,'.claude','settings.local.json'),'utf8'));assert.equal(c.env.KEEP,'yes');assert.equal(c.hooks.Stop.length,2);assert.equal(c.hooks.Stop[0].hooks[0].command,'echo existing');}finally{rmSync(dir,{recursive:true,force:true});}});
