@@ -24,4 +24,3 @@ export function install(agent,project){project=resolve(project);if(!existsSync(p
  }
  throw new Error('Agent must be codex, claude, cline, cline-legacy or opencode');
 }
-

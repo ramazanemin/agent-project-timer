@@ -15,4 +15,3 @@ export function normalize(agent,event,payload){
  if(typeof project!=='string'||typeof session!=='string'||!session)return null;
  return {project,session,agent,state};
 }
-

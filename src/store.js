@@ -15,4 +15,3 @@ export class TimerStore {
  require(id){if(!Number.isSafeInteger(id)||!this.db.prepare('SELECT id FROM projects WHERE id=?').get(id))throw new Error('Project not found');}
  close(){this.db.close();}
 }
-

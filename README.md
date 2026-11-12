@@ -12,7 +12,7 @@ npm install -g .
 agent-timer serve
 ```
 
-npm olmadan da başlatabilirsin: 
+npm olmadan da başlatabilirsin:
 
 ```powershell
 node src/cli.js serve
@@ -114,5 +114,3 @@ Bu kod MIT lisanslıdır. npm adı uygunluğu ve registry yayını ayrıca yapı
 - [Cline SDK hook örnekleri](https://github.com/cline/cline/tree/main/sdk/examples/hooks)
 - [Cline eski eklenti hookları](https://github.com/cline/cline/blob/main/.clinerules/hooks/README.md)
 - [OpenCode V1 eklentileri](https://opencode.ai/docs/en/plugins)
-
-
