@@ -10,7 +10,7 @@ export function install(agent,project){project=resolve(project);if(!existsSync(p
  if(['codex','claude'].includes(agent)){
  const events=agent==='codex'?['UserPromptSubmit','PreToolUse','PostToolUse','PermissionRequest','Stop','Interrupt','SessionEnd']:['UserPromptSubmit','PreToolUse','PostToolUse','PermissionRequest','Stop','StopFailure','SessionEnd'];
  const file=join(project,agent==='codex'?'.codex/hooks.json':'.claude/settings.local.json');const old=existsSync(file)?readFileSync(file,'utf8'):null;const config=old?JSON.parse(old.replace(/^\uFEFF/,'')):{};config.hooks??={};
- for(const event of events){const command=[quoted(process.execPath),quoted(cli),'hook',agent,event,'--project',quoted(project)].join(' ');const group={hooks:[{type:'command',command,timeout:3}]};config.hooks[event]??=[];if(!config.hooks[event].some(g=>g.hooks?.some(h=>h.command===command)))config.hooks[event].push(group);}
+ for(const event of events){const command=[process.platform==='win32'?'node':quoted(process.execPath),quoted(cli),'hook',agent,event,'--project',quoted(project)].join(' ');const group={hooks:[{type:'command',command,timeout:agent==='codex'&&['Interrupt','SessionEnd'].includes(event)?3:15}]};config.hooks[event]??=[];const ownedSuffix=quoted(cli)+' hook '+agent+' '+event+' --project '+quoted(project);config.hooks[event]=config.hooks[event].map(g=>({...g,hooks:g.hooks?.filter(h=>!(h.type==='command'&&h.command?.endsWith(ownedSuffix)))})).filter(g=>!Array.isArray(g.hooks)||g.hooks.length);if(!config.hooks[event].some(g=>g.hooks?.some(h=>h.command===command)))config.hooks[event].push(group);}
  const next=JSON.stringify(config,null,2)+'\n';if(old!==next){if(old!==null)copyFileSync(file,file+'.timer-backup');save(file,next);}return [file];
  }
  if(agent==='opencode'){const plugin=pathToFileURL(fileURLToPath(new URL('./opencode.js',import.meta.url))).href;const file=join(project,'.opencode/plugins/agent-project-timer.js');owned(file,`// ${mark}\nimport { plugin } from ${JSON.stringify(plugin)};\nexport default plugin;\n`);return [file];}
@@ -24,3 +24,6 @@ export function install(agent,project){project=resolve(project);if(!existsSync(p
  }
  throw new Error('Agent must be codex, claude, cline, cline-legacy or opencode');
 }
+
+
+

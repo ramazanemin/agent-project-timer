@@ -56,7 +56,7 @@ Agentı yeniden başlat ve hookları etkinleştir/güvenilir olarak işaretle. S
 | Cline eski VS Code | `agent-timer install cline-legacy` → `.clinerules/hooks/*` | Yalnız Linux/macOS/WSL. Cline Hooks ayarını etkinleştir. Eski sürümlerde TaskComplete desteği eksik olabilir; önce deneme göreviyle kontrol et. Native Windows kurulumu bilinçli olarak reddedilir. |
 | OpenCode **V1** | `.opencode/plugins/agent-project-timer.js` | Agentı yeniden başlat. `session.status`, `session.idle`, hata, izin/soru olayları izlenir. V2 API farklıdır; bu sürüm V2 bağlayıcısı sunmaz. |
 
-**Doğrulama düzeyi:** otomatik testlerde gerçek SQLite, CLI alt süreçleri, üretilmiş Cline hookları, OpenCode callbackleri ve HTTP API çalıştırılır. Bu projede dört ürünle canlı uçtan uca çalışma doğrulanmış değildir. Kurulum sonrası küçük bir deneme göreviyle başlama/durma durumunu panelde kontrol et.
+**Doğrulama düzeyi:** otomatik testlerde gerçek SQLite, CLI alt süreçleri, üretilmiş Cline hookları, OpenCode callbackleri ve HTTP API çalıştırılır. Codex CLI 0.155.1 Windows üzerinde gerçek görevlerle canlı doğrulandı (13 Kasım 2026); ayrıntılar docs/live-test-2026-11-13.md. Diğer agentlarda canlı doğrulama yapılmadı. Kurulum sonrası küçük bir deneme göreviyle başlama/durma durumunu panelde kontrol et.
 
 **Sınırlar:** bilgisayar kapanırsa veya agent stop olayı göndermeden çökerse açık süre otomatik kapanmaz. Panelden Duraklat kullan; bu sürüm geçmiş süre düzenlemesi sunmaz. Uzun sessiz düşünmeyi yanlışlıkla kesmemek için keyfi hareketsizlik zaman aşımı yoktur. Aynı oturumdan sırası bozulmuş lifecycle olayları gelirse doğruluk garanti edilmez. Özel shell karakterleri içeren hook yolları güvenli komut oluşturmak için reddedilir. Agent sandboxının Node ve veritabanı yoluna erişebilmesi gerekir. Uzak/container agentlar yerel veritabanına otomatik bağlanmaz.
 
@@ -114,3 +114,5 @@ Bu kod MIT lisanslıdır. npm adı uygunluğu ve registry yayını ayrıca yapı
 - [Cline SDK hook örnekleri](https://github.com/cline/cline/tree/main/sdk/examples/hooks)
 - [Cline eski eklenti hookları](https://github.com/cline/cline/blob/main/.clinerules/hooks/README.md)
 - [OpenCode V1 eklentileri](https://opencode.ai/docs/en/plugins)
+
+Windows bağlantısı için node PATH üzerinde bulunmalıdır. 0.1.0 kullananlar install komutunu yeniden çalıştırıp değişen hookları agentta yeniden incelemelidir.
