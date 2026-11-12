@@ -116,3 +116,15 @@ Bu kod MIT lisanslıdır. npm adı uygunluğu ve registry yayını ayrıca yapı
 - [OpenCode V1 eklentileri](https://opencode.ai/docs/en/plugins)
 
 Windows bağlantısı için node PATH üzerinde bulunmalıdır. 0.1.0 kullananlar install komutunu yeniden çalıştırıp değişen hookları agentta yeniden incelemelidir.
+
+## Codex Desktop otomatik bağlantısı
+
+```powershell
+agent-timer install codex-desktop --db "D:\Projeler\agent-project-timer\.data\timer.sqlite"
+```
+
+Kullanıcı katmanındaki hooks.json dosyasına Agent Timer bağlantılarını ekler. Her proje için ayrı kurulum gerekmez. Proje yolunu Desktop olayından alır ve oturum boyunca ilk proje yoluna sabitler; araç farklı klasörde çalışsa da sohbetin süresi bölünmez. Panel ve hooklar aynı --db yolunu kullanmalıdır. Desktop Ayarlar → Hook'lar → Kullanıcı yapılandırması ekranından tanımları inceleyip güvenilir olarak işaretle. Windows hookları kurulumdaki Node executable yolunu kullanır, Desktop PATH ortamına güvenmez.
+
+Kullanıcı katmanı Codex CLI ile ortak olduğundan aynı profildeki CLI oturumları da ölçülebilir. Desktop'a özgü kayıt filtresi veya bulut/container kurulumu sunulmaz. Önceden kurulmuş proje hookları farklı veritabanına yazıyorsa ayrıca güncellenmelidir.
+
+13 Kasım 2026: Desktop'ta 7 bağlantı etkinleştirildi; gerçek Desktop sohbetinin oturum kimliğiyle panelde süre kaydı görüldü. Türkçe klasör, değişen araç klasörü, tek oturum/proje, açık veritabanı yolu ve diğer hookları koruma testleri geçti. Daha önce başlamış tur yalnız etkinleşmeden sonraki kısmı ölçer. İlk canlı denemede oluşan iki ayrı proje satırı, geçmiş değişikliği için onay gerektiğinden birleştirilmedi; sonraki olaylar ilk proje yoluna sabitlenir.
