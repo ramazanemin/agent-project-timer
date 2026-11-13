@@ -7,7 +7,8 @@ AI agentları için yerel, otomatik proje süre takibi. Codex, Claude Code, gün
 Node.js **22.13+** gerekir (Node 24 LTS önerilir). Bu depo henüz npm registry üzerinde yayımlanmış değildir.
 
 ```powershell
-cd D:\Projeler\agent-project-timer
+git clone https://github.com/ramazanemin/agent-project-timer.git
+cd agent-project-timer
 npm install -g .
 agent-timer serve
 ```
@@ -98,10 +99,12 @@ npm test
 npm pack --dry-run
 ```
 
-GitHub Actions, Windows/Ubuntu üzerinde Node 22 ve 24 testlerini çalıştırır. GitHub'da boş `agent-project-timer` deposu oluşturduktan sonra:
+GitHub Actions, Windows/Ubuntu üzerinde Node 22 ve 24 testlerini çalıştırır. Kaynak depo: [ramazanemin/agent-project-timer](https://github.com/ramazanemin/agent-project-timer).
+
+Yerel değişiklikleri kendi depona göndermek için:
 
 ```sh
-git remote add origin https://github.com/KULLANICI/agent-project-timer.git
+git remote add origin git@github.com:ramazanemin/agent-project-timer.git
 git push -u origin main
 ```
 
@@ -127,4 +130,12 @@ Kullanıcı katmanındaki hooks.json dosyasına Agent Timer bağlantılarını e
 
 Kullanıcı katmanı Codex CLI ile ortak olduğundan aynı profildeki CLI oturumları da ölçülebilir. Desktop'a özgü kayıt filtresi veya bulut/container kurulumu sunulmaz. Önceden kurulmuş proje hookları farklı veritabanına yazıyorsa ayrıca güncellenmelidir.
 
-13 Kasım 2026: Desktop'ta 7 bağlantı etkinleştirildi; gerçek Desktop sohbetinin oturum kimliğiyle panelde süre kaydı görüldü. Türkçe klasör, değişen araç klasörü, tek oturum/proje, açık veritabanı yolu ve diğer hookları koruma testleri geçti. Daha önce başlamış tur yalnız etkinleşmeden sonraki kısmı ölçer. İlk canlı denemede oluşan iki ayrı proje satırı, geçmiş değişikliği için onay gerektiğinden birleştirilmedi; sonraki olaylar ilk proje yoluna sabitlenir.
+13 Kasım 2026: Desktop'ta 7 bağlantı etkinleştirildi; gerçek Desktop sohbetinin oturum kimliğiyle panelde süre kaydı görüldü. Türkçe klasör, değişen araç klasörü, tek oturum/proje, açık veritabanı yolu ve diğer hookları koruma testleri geçti. Daha önce başlamış tur yalnız etkinleşmeden sonraki kısmı ölçer.
+
+### Desktop proje adları (0.2.1)
+
+Desktop bağlantısı klasörün kısa adını kullanmak yerine yerel Codex metadata veritabanındaki görünen `name` alanını okur. Adlandırılmış bir Desktop projesi varsa proje adı, yoksa sohbet adı kullanılır. İlk kullanıcı mesajını içerebilen `title` alanı ad kaynağı olarak kullanılmaz. Proje yolu da aynı sohbetin gerçek çalışma alanından alınır; araçların farklı klasörde çalışması satırları bölmez. Panelde elle verilen adlar otomatik eşleştirmeye karşı korunur.
+
+Metadata salt okunur açılır; mesajlar, promptlar veya kimlik bilgileri okunmaz. Bu yerel metadata şeması Codex güncellemelerinde değişebilir. Metadata yoksa veya erişilemiyorsa mevcut ad ve klasör yolu korunur. Sonraki agent olayında isim tekrar eşleştirilir; güncel panel sunucusu da isimleri listeleme sırasında yeniler. Güncellenen sunucu kodunu yüklemek için paneli yeniden başlat.
+
+Kullanıcının açık onayıyla ilk canlı denemede bölünen iki satır birleştirildi. Önce SQLite yedeği alındı; çakışan süreler toplanmadı. Açık kalmış kopya aralık, aynı oturumdaki mevcut bitiş kaydıyla kapatılarak bekleme saatlerinin aktif süreye eklenmesi düzeltildi. Kaynak zaman aralıkları korunur.

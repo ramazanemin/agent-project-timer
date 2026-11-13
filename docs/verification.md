@@ -6,3 +6,5 @@
 - npm package content checked with npm 11.6.2 downloaded from registry.npmjs.org into ignored work/tools because host PATH contains Node but no npm.
 - Final independent review found OpenCode .mjs discovery and Windows case identity bugs; regression tests reproduced both before fixes. Full suite passed after fixes.
 - No live end-to-end session with external Codex/Claude/Cline/OpenCode clients performed. No global agent settings modified. No remote GitHub repository or npm registry publication performed.
+
+Publication verification, 2026-11-13: the complete suite passed 26/26 with ordinary network permissions, including the previously sandbox-blocked localhost HTTP test. Package contents checked with npm pack --dry-run.
