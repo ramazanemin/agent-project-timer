@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
-import { mkdtempSync,mkdirSync,rmSync } from 'node:fs';
+import { mkdtempSync,mkdirSync,rmSync,realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,7 +22,7 @@ test('real Desktop hook CLI stores visible name and canonical workspace across t
    assert.equal(result.status,0,result.stderr);
   }
   const timer=new TimerStore(file);
-  try{assert.equal(timer.list().length,1);assert.equal(timer.list()[0].name,'Desktop proje adı');assert.equal(timer.list()[0].path,workspace);assert.equal(timer.list()[0].status,'paused');}finally{timer.close();}
+  try{assert.equal(timer.list().length,1);assert.equal(timer.list()[0].name,'Desktop proje adı');assert.equal(timer.list()[0].path,realpathSync.native(workspace));assert.equal(timer.list()[0].status,'paused');}finally{timer.close();}
  }finally{fixture.db.close();rmSync(fixture.root,{recursive:true,force:true});}
 });
 test('Desktop uses visible name instead of opaque folder; named workspace wins',()=>{const f=metadataRoot();try{f.db.prepare('INSERT INTO threads VALUES(?,?,?,?)').run('s','AI proje süresi paneli oluştur',process.cwd(),null);assert.equal(readDesktopMetadata('s',{codexHome:f.home}).name,'AI proje süresi paneli oluştur');f.db.prepare('INSERT INTO projects VALUES(?,?)').run('p','İş projesi');f.db.prepare('UPDATE threads SET project_id=? WHERE id=?').run('p','s');assert.equal(readDesktopMetadata('s',{codexHome:f.home}).name,'İş projesi');}finally{f.db.close();rmSync(f.root,{recursive:true,force:true});}});
